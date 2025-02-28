@@ -33,6 +33,15 @@ adb connect localhost:6520
 adb devices # should see cuttlefish device
 ```
 
+## Use custom qemu build
+
+You can use a custom qemu build by attaching a volume of the directory, and
+providing the path to it in the `QEMU_BINDIR` variable
+
+```bash
+docker run -v <path-to-qemu-dir>:/qemu -e "QEMU_BINDIR=/qemu"
+```
+
 # Common Issues
 
 You may need to install the iptables kernel module manually on your host,
