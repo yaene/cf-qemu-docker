@@ -35,11 +35,13 @@ adb devices # should see cuttlefish device
 
 ## Use custom qemu build
 
-You can use a custom qemu build by attaching a volume of the directory, and
-providing the path to it in the `QEMU_BINDIR` variable
+To use custom qemu build it's easiest to compile it on the container itself
+as part of the build process to avoid any compatibility issues (e.g. with shared libraries).
+You have to supply your qemu source in a qemu folder under the root of this project.
+Then set the build argument `QEMU_BUILD=custom` to cause the container to build the qemu binary.
 
 ```bash
-docker run -v <path-to-qemu-dir>:/qemu -e "QEMU_BINDIR=/qemu"
+docker build -t cuttlefish-qemu -build-arg QEMU_BUILD=custom .
 ```
 
 # Common Issues

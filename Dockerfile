@@ -1,5 +1,8 @@
-FROM ubuntu:24.04
+ARG QEMU_BUILD=default
 
+FROM ubuntu:24.04 AS common
+
+# install dependencies for cuttlefish
 RUN apt update && \
     apt upgrade -y && \
     apt install -y bridge-utils git devscripts equivs config-package-dev debhelper-compat \
@@ -13,6 +16,7 @@ RUN update-ca-certificates
 
 WORKDIR /root
 
+# install cuttlefish
 RUN git clone https://github.com/google/android-cuttlefish && \
     cd android-cuttlefish && \
     tools/buildutils/build_packages.sh && \
@@ -24,5 +28,22 @@ RUN usermod -aG cvdnetwork root
 
 COPY --chmod=755 ./src /run/
 
+FROM common AS qemu_custom
+ENV QEMU_SRCDIR=/qemu
+# install dependencies for qemu
+RUN cat <<END >> /etc/apt/sources.list.d/ubuntu.sources 
+Types: deb-src 
+URIs: http://us.archive.ubuntu.com/ubuntu/ 
+Suites: noble noble-updates noble-backports noble-proposed 
+Components: main restricted universe multiverse 
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg 
+END
+RUN apt update && apt -y build-dep qemu
+RUN --mount=type=bind,source=qemu,target=/tmp/qemu,ro \
+  /run/build-qemu.sh
+
+FROM common AS qemu_default
+
+FROM qemu_${QEMU_BUILD}
 ENTRYPOINT ["/run/entry.sh"]
 

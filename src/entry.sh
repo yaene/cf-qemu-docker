@@ -6,7 +6,6 @@ DEFAULT_CVD_ARGS="\
 "
 
 : "${CF_HOME:=/cuttlefish}"
-: "${QEMU_BINDIR:=$CF_HOME/bin/x86_64-linux-gnu/qemu}"
 : "${CVD_ARGS:=$DEFAULT_CVD_ARGS}"
 : "${EXTRA_CVD_ARGS:=}"
 
@@ -16,8 +15,9 @@ warn () { printf "%b%s%b" "\E[1;31m❯ " "Warning: ${1:-}" "\E[0m\n" >&2; }
 
 service cuttlefish-host-resources start
 
+QEMU_BINDIR_ARG=${QEMU_SRCDIR:+"--qemu_binary_dir=$QEMU_SRCDIR/build"}
 HOME=$CF_HOME $CF_HOME/bin/launch_cvd \
   $CVD_ARGS \
-  --qemu_binary_dir=$QEMU_BINDIR \
+  $QEMU_BINDIR_ARG \
   $EXTRA_CVD_ARGS
 
