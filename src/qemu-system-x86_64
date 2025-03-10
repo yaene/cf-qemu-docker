@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+QEMU_CUSTOM=${QEMU_SRCDIR:+$QEMU_SRCDIR/build/qemu-system-x86_64}
+QEMU=${QEMU_CUSTOM:-"/cuttlefish/bin/x86_64-linux-gnu/qemu/qemu-system-x86_64"}
+ARGS="$@"
+
+$QEMU $ARGS $EXTRA_QEMU_ARGS

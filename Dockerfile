@@ -26,10 +26,10 @@ RUN git clone https://github.com/google/android-cuttlefish && \
 RUN groupadd kvm && usermod -aG kvm root
 RUN usermod -aG cvdnetwork root
 
-COPY --chmod=755 ./src /run/
 
 FROM common AS qemu_custom
 ENV QEMU_SRCDIR=/qemu
+COPY --chmod=755 ./src/build-qemu.sh /run/
 # install dependencies for qemu
 RUN cat <<END >> /etc/apt/sources.list.d/ubuntu.sources 
 Types: deb-src 
@@ -41,9 +41,11 @@ END
 RUN apt update && apt -y build-dep qemu
 RUN --mount=type=bind,source=qemu,target=/tmp/qemu,ro \
   /run/build-qemu.sh
-
 FROM common AS qemu_default
 
 FROM qemu_${QEMU_BUILD}
+COPY --chmod=755 ./src/qemu-system-aarch64 /run/
+COPY --chmod=755 ./src/qemu-system-x86_64 /run/
+COPY --chmod=755 ./src/entry.sh /run/
 ENTRYPOINT ["/run/entry.sh"]
 
