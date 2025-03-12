@@ -33,6 +33,18 @@ adb connect localhost:6520
 adb devices # should see cuttlefish device
 ```
 
+## Get Graphical Output
+
+You can start a vnc server in the container through QEMU by passing the vnc
+argument.
+
+```bash
+docker run [other args] --env EXTRA_QEMU_ARGS="-vnc :1"
+```
+
+This starts the server on port 5901, which you can forward to the host and then
+connect to it with a vnc client.
+
 ## Use custom qemu build
 
 To use custom qemu build it's easiest to compile it on the container itself
