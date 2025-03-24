@@ -17,6 +17,6 @@ service cuttlefish-host-resources start
 
 HOME=$CF_HOME $CF_HOME/bin/launch_cvd \
   $CVD_ARGS \
-  --qemu_binary_dir="/run"
-$EXTRA_CVD_ARGS
+  --qemu_binary_dir="/run" \
+  $EXTRA_CVD_ARGS
 
