@@ -3,5 +3,5 @@
 QEMU_CUSTOM=${QEMU_SRCDIR:+$QEMU_SRCDIR/build/qemu-system-aarch64}
 QEMU=${QEMU_CUSTOM:-"/cuttlefish/bin/aarch64-linux-gnu/qemu/qemu-system-aarch64"}
 ARGS="$@"
-
+echo "$ARGS" > "arguments.txt"
 $QEMU $ARGS $EXTRA_QEMU_ARGS
